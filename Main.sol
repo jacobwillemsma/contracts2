@@ -43,8 +43,20 @@ contract Company {
     uint8 majorReward,
     uint8 criticalReward
   )
-  onlyOwner returns (address) {
-    address screening = new Screening(msg.sender, dbID, screeningName, minorReward, majorReward, criticalReward);
+  onlyOwner payable returns (address) {
+    require(msg.value != 0);
+
+    address screening = new Screening(
+      msg.sender,
+      dbID,
+      screeningName,
+      bountyAmount,
+      minorReward,
+      majorReward,
+      criticalReward
+    );
+
+    screening.transfer(msg.value);
 
     screenings[screeningCount] = screening;
     screeningCount += 1;
