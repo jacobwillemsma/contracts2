@@ -1,5 +1,3 @@
-# contracts2
-
 <p align="center">
   <img src="./documentation/logo1.png" height="250" /></img>
 </p>
