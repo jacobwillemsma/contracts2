@@ -22,7 +22,6 @@ contract Company {
   string public name;
   string public fileHash;
   uint256 public spentETH;
-  uint32 public screeningsCount;
   address[256] public screenings;
   uint32 public screeningCount;
 
@@ -38,13 +37,14 @@ contract Company {
   }
 
   function createScreening(
-    string name,
+    uint16 dbID,
+    string screeningName,
     uint8 minorReward,
     uint8 majorReward,
     uint8 criticalReward
   )
   onlyOwner returns (address) {
-    address screening = new Screening(msg.sender, name, minorReward, majorReward, criticalReward);
+    address screening = new Screening(msg.sender, dbID, screeningName, minorReward, majorReward, criticalReward);
 
     screenings[screeningCount] = screening;
     screeningCount += 1;
@@ -57,6 +57,7 @@ contract Screening {
 
   address owner;
 
+  uint16 dbID;
   uint256 public bounty;
   string public name;
   uint8 public minorReward;
@@ -72,10 +73,18 @@ contract Screening {
     _;
   }
 
-  function Screening(address _owner, string _name, uint8 _minorReward, uint8 _majorReward, uint8 _criticalReward) {
+  function Screening(
+    address _owner,
+    uint16 _dbID,
+    string _name,
+    uint8 _minorReward,
+    uint8 _majorReward,
+    uint8 _criticalReward
+  ) {
     owner = _owner;
     bounty = msg.value;
 
+    dbID = _dbID;
     name = _name;
     minorReward = _minorReward;
     majorReward = _majorReward;
@@ -95,6 +104,7 @@ contract Screening {
   }
 
   function createClaim(
+    uint16 dbID,
     uint8 startLineNum,
     uint8 endLineNum,
     string comment,
@@ -103,7 +113,7 @@ contract Screening {
     int isCritical
   )
   returns (address) {
-    address claim = new Claim(startLineNum, endLineNum, comment, isMinor, isMajor, isCritical);
+    address claim = new Claim(dbID, startLineNum, endLineNum, comment, isMinor, isMajor, isCritical);
 
     claims[msg.sender] = claim;
 
@@ -140,6 +150,7 @@ contract Claim {
 
   address screeningAddress;
 
+  uint16 dbID;
   uint8 public startLineNum;
   uint8 public endLineNum;
   string public comment;
@@ -156,6 +167,7 @@ contract Claim {
   }
 
   function Claim(
+    uint16 _dbID,
     uint8 _startLineNum,
     uint8 _endLineNum,
     string _comment,
@@ -165,6 +177,7 @@ contract Claim {
   ) {
     screeningAddress = msg.sender;
 
+    dbID = _dbID;
     startLineNum = _startLineNum;
     endLineNum = _endLineNum;
     comment = _comment;
