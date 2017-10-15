@@ -37,20 +37,19 @@ contract Company {
   }
 
   function createScreening(
-    uint16 dbID,
+    string storjHash,
     string screeningName,
-    uint8 minorReward,
-    uint8 majorReward,
-    uint8 criticalReward
+    uint256 minorReward,
+    uint256 majorReward,
+    uint256 criticalReward
   )
   onlyOwner payable returns (address) {
     require(msg.value != 0);
 
     address screening = new Screening(
       msg.sender,
-      dbID,
+      storjHash,
       screeningName,
-      bountyAmount,
       minorReward,
       majorReward,
       criticalReward
@@ -69,12 +68,12 @@ contract Screening {
 
   address owner;
 
-  uint16 dbID;
+  string storjHash;
   uint256 public bounty;
   string public name;
-  uint8 public minorReward;
-  uint8 public majorReward;
-  uint8 public criticalReward;
+  uint256 public minorReward;
+  uint256 public majorReward;
+  uint256 public criticalReward;
   bool isActive = true;
 
   // owner => claim
@@ -87,16 +86,16 @@ contract Screening {
 
   function Screening(
     address _owner,
-    uint16 _dbID,
+    string _storjHash,
     string _name,
-    uint8 _minorReward,
-    uint8 _majorReward,
-    uint8 _criticalReward
+    uint256 _minorReward,
+    uint256 _majorReward,
+    uint256 _criticalReward
   ) {
     owner = _owner;
     bounty = msg.value;
 
-    dbID = _dbID;
+    storjHash = _storjHash;
     name = _name;
     minorReward = _minorReward;
     majorReward = _majorReward;
