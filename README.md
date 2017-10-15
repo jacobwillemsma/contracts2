@@ -1,5 +1,10 @@
 # contracts2
-Contracts 2
+
+<p align="center">
+  <img src="./documentation/logo1.png" height="250" /></img>
+</p>
+
+# ThirdEye Contracts
 
 This repo contains smart contracts used in our project.
 
